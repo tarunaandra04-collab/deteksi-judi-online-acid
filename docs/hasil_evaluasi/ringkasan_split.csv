@@ -1,0 +1,4 @@
+split,halaman,persen_halaman,domain,grup,halaman_judi,halaman_normal,proporsi_judi,cluster_judi,domain_judi,domain_normal,halaman_judi_nondork
+train,712,68.6,230,202,348,364,0.4888,119,147,83,115
+test,221,21.3,70,65,116,105,0.5249,45,50,20,50
+holdout,105,10.1,30,30,52,53,0.4952,18,18,12,52

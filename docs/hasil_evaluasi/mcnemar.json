@@ -1,0 +1,22 @@
+{
+  "status": "FINAL",
+  "metode": "McNemar eksak (statsmodels)",
+  "test": {
+    "n": 221,
+    "keduanya_benar": 215,
+    "b_rf_benar_lgbm_salah": 2,
+    "c_rf_salah_lgbm_benar": 3,
+    "keduanya_salah": 1,
+    "p_value_eksak": 1.0,
+    "bermakna_0.05": false
+  },
+  "holdout": {
+    "n": 105,
+    "keduanya_benar": 99,
+    "b_rf_benar_lgbm_salah": 0,
+    "c_rf_salah_lgbm_benar": 5,
+    "keduanya_salah": 1,
+    "p_value_eksak": 0.0625,
+    "bermakna_0.05": false
+  }
+}

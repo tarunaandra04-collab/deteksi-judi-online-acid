@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pengaturan — Deteksi Judi Online</title>
+  <style>
+    :root { --bg:#f9fafb; --fg:#111827; --muted:#6b7280; --card:#fff; --line:#e5e7eb; --accent:#0f766e; --danger:#dc2626; --warn:#d97706; --safe:#15803d; }
+    @media (prefers-color-scheme: dark) { :root { --bg:#0b1220; --fg:#f3f4f6; --muted:#9ca3af; --card:#111827; --line:#374151; --accent:#2dd4bf; --danger:#f87171; --warn:#fbbf24; --safe:#4ade80; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .page { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+    h1 { font-size: 22px; margin: 0 0 4px; } .sub { color: var(--muted); margin-bottom: 20px; }
+    section { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; }
+    h2 { font-size: 15px; margin: 0 0 12px; }
+    label.f { display:block; margin: 10px 0 4px; font-weight:600; font-size: 13px; }
+    .hint { color: var(--muted); font-size: 12px; margin-top: 2px; }
+    input[type=text], select, textarea { width:100%; padding:7px 10px; border:1px solid var(--line); border-radius:8px; background:var(--bg); color:var(--fg); font:inherit; }
+    textarea { min-height: 70px; font-family: ui-monospace, Consolas, monospace; font-size: 12px; }
+    .check { display:flex; gap:8px; align-items:flex-start; margin: 8px 0; }
+    .check input { margin-top: 4px; }
+    button { border:1px solid var(--line); background:var(--card); color:var(--fg); border-radius:8px; padding:7px 14px; cursor:pointer; font:inherit; }
+    button.primary { background: var(--accent); border-color: var(--accent); color:#fff; }
+    button.danger { color: var(--danger); }
+    .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top: 12px; }
+    #srv { margin-top: 8px; padding: 8px 10px; border-radius: 8px; background: var(--bg); font-size: 12px; white-space: pre-wrap; }
+    .stats { display:grid; grid-template-columns: repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-bottom: 12px; }
+    .stat { background: var(--bg); border-radius: 8px; padding: 8px 12px; } .stat b { display:block; font-size:20px; } .stat span { color:var(--muted); font-size:12px; }
+    .tw { overflow:auto; max-height: 420px; border:1px solid var(--line); border-radius: 8px; }
+    table { width:100%; border-collapse: collapse; font-size: 12px; }
+    th, td { padding: 5px 8px; border-bottom: 1px solid var(--line); text-align:left; white-space: nowrap; }
+    th { position: sticky; top:0; background: var(--card); }
+    td.u { max-width: 300px; overflow:hidden; text-overflow: ellipsis; }
+    .judi { color: var(--danger); font-weight:600; } .waspada { color: var(--warn); font-weight:600; } .aman { color: var(--safe); }
+    #saved { color: var(--safe); margin-left: 8px; opacity: 0; transition: opacity .2s; } #saved.on { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="page">
+  <h1>Pengaturan</h1>
+  <div class="sub">Deteksi Judi Online .ac.id · v2.0</div>
+
+  <section>
+    <h2>Server model (Flask lokal)</h2>
+    <label class="f" for="apiUrl">Alamat API</label>
+    <input id="apiUrl" type="text" spellcheck="false" />
+    <div class="hint">Bawaan <code>http://127.0.0.1:5000</code>. Hanya alamat localhost yang diizinkan oleh ekstensi.</div>
+    <div class="row"><button id="testBtn">Tes koneksi</button></div>
+    <div id="srv" hidden></div>
+  </section>
+
+  <section>
+    <h2>Deteksi</h2>
+    <label class="f" for="model">Model</label>
+    <select id="model"><option value="random_forest">Random Forest (utama)</option><option value="lightgbm">LightGBM (pembanding)</option></select>
+    <label class="f" for="threshold">Ambang peluang judi: <span id="thrv"></span></label>
+    <input id="threshold" type="range" min="0.2" max="0.9" step="0.05" />
+    <div class="hint">Turunkan untuk lebih sensitif (recall naik, false positive naik). Bab 3 menjadikan recall metrik prioritas.</div>
+    <div class="check"><input id="autoScan" type="checkbox" /><label for="autoScan">Pindai otomatis setiap halaman .ac.id</label></div>
+    <div class="check"><input id="watchChanges" type="checkbox" /><label for="watchChanges">Pindai ulang bila konten halaman berubah (konten dinamis / injeksi)</label></div>
+    <label class="f" for="whitelist">Domain dikecualikan (satu per baris)</label>
+    <textarea id="whitelist" spellcheck="false" placeholder="contoh: ui.ac.id"></textarea>
+  </section>
+
+  <section>
+    <h2>Tampilan di halaman</h2>
+    <label class="f" for="banner">Lencana di pojok halaman</label>
+    <select id="banner"><option value="risk">Tampilkan hanya bila ada temuan</option><option value="always">Selalu tampilkan</option><option value="never">Jangan tampilkan</option></select>
+    <div class="check"><input id="highlight" type="checkbox" /><label for="highlight">Sorot kata kunci dan tautan mencurigakan di halaman</label></div>
+  </section>
+
+  <div class="row" style="margin-bottom:16px"><button id="save" class="primary">Simpan pengaturan</button><span id="saved">Tersimpan ✓</span></div>
+
+  <section>
+    <h2>Riwayat pemindaian</h2>
+    <div class="check"><input id="saveHistory" type="checkbox" /><label for="saveHistory">Simpan riwayat di perangkat ini (URL, hasil, waktu — tanpa isi halaman)</label></div>
+    <div class="stats" id="stats"></div>
+    <div class="tw"><table><thead><tr><th>Waktu</th><th>Halaman</th><th>Hasil</th><th>P(judi)</th><th>Model</th><th>Kata kunci</th><th>Tersembunyi</th><th>E2E (ms)</th></tr></thead><tbody id="hist"></tbody></table></div>
+    <div class="row"><button id="csv">Ekspor CSV</button><button id="clear" class="danger">Hapus riwayat</button></div>
+    <div class="hint">Waktu respons end-to-end (kolom terakhir) dapat dipakai untuk skenario TC-06 pada Tabel 3.16.</div>
+  </section>
+</div>
+<script type="module" src="options.js"></script>
+</body>
+</html>

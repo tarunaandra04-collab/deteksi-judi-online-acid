@@ -1,0 +1,10 @@
+# Versi ini = versi saat model dilatih (backend/models/model_info.json).
+# Pickle scikit-learn hanya andal jika dimuat dengan versi yang sama.
+flask>=3.0
+flask-cors>=4.0
+joblib>=1.4
+numpy==2.5.4
+scipy>=1.14
+scikit-learn==1.9.1
+lightgbm==4.7.0
+Sastrawi==1.0.1

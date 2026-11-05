@@ -1,0 +1,33 @@
+{
+  "status": "FINAL -- label Layer 1 (keyword) pada data_final; Layer 2 belum diverifikasi manual",
+  "struct_cols_order": [
+    "FLNK_01_link_count",
+    "FLNK_02_ext_ratio",
+    "FLNK_03_gamb_link",
+    "FSTR_01_iframe_count",
+    "FSTR_02_has_hidden",
+    "FSTR_03_dom_depth",
+    "FMETA_01_meta_judi_flag",
+    "FURL_01_url_flag"
+  ],
+  "tfidf": {
+    "ngram_range": [
+      1,
+      2
+    ],
+    "max_features": 3000,
+    "n_fitur_aktual": 3000
+  },
+  "scaler": "MinMaxScaler fit di train",
+  "smote_diterapkan": false,
+  "rasio_minoritas_train": 0.4887640449438202,
+  "ambang_smote": 0.4,
+  "random_state": 42,
+  "versi": {
+    "python": "3.14.0",
+    "sklearn": "1.9.1",
+    "numpy": "2.5.4",
+    "platform": "Windows-11-10.0.26200-SP0"
+  },
+  "catatan": "model.pkl = RandomForest saja (tanpa SMOTE) -> predict(X) langsung seperti model_loader.py; pickle harus dimuat dengan versi scikit-learn yang sama."
+}

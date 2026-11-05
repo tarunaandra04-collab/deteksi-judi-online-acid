@@ -1,0 +1,57 @@
+:root {
+  --bg: #ffffff; --fg: #111827; --muted: #6b7280; --card: #f3f4f6; --line: #e5e7eb;
+  --danger: #dc2626; --danger-bg: #fee2e2; --warn: #d97706; --warn-bg: #fef3c7;
+  --safe: #15803d; --safe-bg: #dcfce7; --accent: #0f766e; --info-bg: #dbeafe; --info: #1d4ed8;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111827; --fg: #f3f4f6; --muted: #9ca3af; --card: #1f2937; --line: #374151;
+    --danger: #f87171; --danger-bg: #450a0a; --warn: #fbbf24; --warn-bg: #451a03;
+    --safe: #4ade80; --safe-bg: #052e16; --accent: #2dd4bf; --info-bg: #172554; --info: #93c5fd;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; width: 380px; background: var(--bg); color: var(--fg); font: 13px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
+header .title { font-weight: 700; font-size: 14px; }
+header .subtitle { color: var(--muted); font-size: 11px; }
+.icon-btn { margin-left: auto; border: 0; background: transparent; color: var(--muted); font-size: 18px; cursor: pointer; border-radius: 6px; padding: 4px 8px; }
+.icon-btn:hover { background: var(--card); color: var(--fg); }
+main { padding: 12px 14px 14px; }
+.muted { color: var(--muted); }
+.host { font-weight: 600; word-break: break-all; margin-bottom: 8px; }
+.status { border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; }
+.status .t { font-weight: 700; font-size: 15px; }
+.status .s { font-size: 12px; margin-top: 2px; }
+.status.danger { background: var(--danger-bg); color: var(--danger); }
+.status.warn { background: var(--warn-bg); color: var(--warn); }
+.status.safe { background: var(--safe-bg); color: var(--safe); }
+.status.info { background: var(--info-bg); color: var(--info); }
+.status.neutral { background: var(--card); color: var(--fg); }
+.meter-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+.meter { position: relative; height: 10px; background: var(--card); border-radius: 5px; margin: 4px 0 12px; }
+.meter > i { display: block; height: 100%; border-radius: 5px; background: var(--safe); }
+.meter.danger > i { background: var(--danger); } .meter.warn > i { background: var(--warn); }
+.meter .thr { position: absolute; top: -3px; bottom: -3px; width: 2px; background: var(--fg); opacity: .7; }
+h3 { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 12px 0 6px; }
+ul.reasons { margin: 0; padding-left: 16px; }
+ul.reasons li { margin: 3px 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { padding: 2px 8px; border-radius: 10px; font-size: 12px; background: var(--danger-bg); color: var(--danger); }
+.chip.weak { background: var(--warn-bg); color: var(--warn); }
+.chip.term { background: var(--card); color: var(--fg); }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.stat { background: var(--card); border-radius: 8px; padding: 6px 10px; }
+.stat b { display: block; font-size: 16px; }
+.stat span { font-size: 11px; color: var(--muted); }
+.hid { border-left: 3px solid var(--warn); background: var(--warn-bg); padding: 4px 8px; margin: 4px 0; border-radius: 0 6px 6px 0; font-size: 12px; word-break: break-word; }
+.buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+button.btn { border: 1px solid var(--line); background: var(--card); color: var(--fg); border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+button.btn:hover { border-color: var(--accent); }
+button.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.footnote { margin-top: 10px; font-size: 11px; color: var(--muted); }
+details { margin-top: 8px; }
+details summary { cursor: pointer; color: var(--muted); font-size: 12px; }
+table.mini { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 4px; }
+table.mini td { padding: 2px 4px; border-bottom: 1px solid var(--line); }
+table.mini td:last-child { text-align: right; font-variant-numeric: tabular-nums; }

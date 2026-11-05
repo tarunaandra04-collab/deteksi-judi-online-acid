@@ -1,0 +1,24 @@
+# lingkungan & cache
+.venv/
+__pycache__/
+*.pyc
+.browser-profile/
+.backend.pid
+backend.log
+backend.log.err
+
+# berkas lokal
+*.crx
+*.pem
+.DS_Store
+Thumbs.db
+
+# dataset mentah (besar & berisi halaman nyata) tidak ikut repo
+dataset/
+data_final/
+
+# cache stem pengguna (dibuat saat server dipakai)
+backend/.stem_cache_user.json
+
+# hasil uji otomatis (tangkapan layar)
+tests/_hasil_e2e/

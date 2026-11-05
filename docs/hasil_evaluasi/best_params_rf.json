@@ -1,0 +1,50 @@
+{
+  "status": "FINAL",
+  "best_params": {
+    "class_weight": "balanced",
+    "max_depth": 20,
+    "max_features": "sqrt",
+    "min_samples_leaf": 1,
+    "min_samples_split": 10,
+    "n_estimators": 200
+  },
+  "best_cv_f1_kelas_judi": 0.9898228731592731,
+  "scoring": "f1 (kelas judi=1)",
+  "cv": "StratifiedKFold(n_splits=5, shuffle=True, random_state=42)",
+  "jumlah_kombinasi": 648,
+  "param_grid": {
+    "n_estimators": [
+      100,
+      200,
+      300
+    ],
+    "max_depth": [
+      null,
+      10,
+      20,
+      30
+    ],
+    "min_samples_split": [
+      2,
+      5,
+      10
+    ],
+    "min_samples_leaf": [
+      1,
+      2,
+      4
+    ],
+    "max_features": [
+      "sqrt",
+      "log2",
+      null
+    ],
+    "class_weight": [
+      "balanced",
+      null
+    ]
+  },
+  "waktu_menit": 12.19,
+  "smote_diterapkan": false,
+  "rasio_minoritas_train": 0.4887640449438202
+}

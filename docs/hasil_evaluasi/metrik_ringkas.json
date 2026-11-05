@@ -1,0 +1,428 @@
+{
+  "status": "FINAL",
+  "random_forest": {
+    "test": {
+      "n": 221,
+      "n_judi": 116,
+      "accuracy": 0.9819004524886877,
+      "precision_judi": 1.0,
+      "recall_judi": 0.9655172413793104,
+      "f1_judi": 0.9824561403508771,
+      "roc_auc": 0.9995073891625617,
+      "fpr": 0.0,
+      "tn": 105,
+      "fp": 0,
+      "fn": 4,
+      "tp": 112
+    },
+    "holdout": {
+      "n": 105,
+      "n_judi": 52,
+      "accuracy": 0.9428571428571428,
+      "precision_judi": 0.9791666666666666,
+      "recall_judi": 0.9038461538461539,
+      "f1_judi": 0.94,
+      "roc_auc": 0.9876632801161103,
+      "fpr": 0.018867924528301886,
+      "tn": 52,
+      "fp": 1,
+      "fn": 5,
+      "tp": 47
+    }
+  },
+  "lightgbm": {
+    "test": {
+      "n": 221,
+      "n_judi": 116,
+      "accuracy": 0.9864253393665159,
+      "precision_judi": 1.0,
+      "recall_judi": 0.9741379310344828,
+      "f1_judi": 0.9868995633187773,
+      "roc_auc": 0.9957307060755337,
+      "fpr": 0.0,
+      "tn": 105,
+      "fp": 0,
+      "fn": 3,
+      "tp": 113
+    },
+    "holdout": {
+      "n": 105,
+      "n_judi": 52,
+      "accuracy": 0.9904761904761905,
+      "precision_judi": 1.0,
+      "recall_judi": 0.9807692307692307,
+      "f1_judi": 0.9902912621359223,
+      "roc_auc": 1.0,
+      "fpr": 0.0,
+      "tn": 53,
+      "fp": 0,
+      "fn": 1,
+      "tp": 51
+    }
+  },
+  "mcnemar": {
+    "test": {
+      "n": 221,
+      "keduanya_benar": 215,
+      "b_rf_benar_lgbm_salah": 2,
+      "c_rf_salah_lgbm_benar": 3,
+      "keduanya_salah": 1,
+      "p_value_eksak": 1.0,
+      "bermakna_0.05": false
+    },
+    "holdout": {
+      "n": 105,
+      "keduanya_benar": 99,
+      "b_rf_benar_lgbm_salah": 0,
+      "c_rf_salah_lgbm_benar": 5,
+      "keduanya_salah": 1,
+      "p_value_eksak": 0.0625,
+      "bermakna_0.05": false
+    }
+  },
+  "independensi_nondork": {
+    "random_forest": {
+      "recall_per_subset": {
+        "test_nondork": {
+          "n_judi": 50,
+          "tp": 47,
+          "recall": 0.94,
+          "ci95_wilson": [
+            0.8378,
+            0.9794
+          ]
+        },
+        "test_reguler": {
+          "n_judi": 66,
+          "tp": 65,
+          "recall": 0.9848,
+          "ci95_wilson": [
+            0.919,
+            0.9973
+          ]
+        },
+        "holdout_nondork": {
+          "n_judi": 52,
+          "tp": 47,
+          "recall": 0.9038,
+          "ci95_wilson": [
+            0.7939,
+            0.9582
+          ]
+        },
+        "holdout_reguler": {
+          "n_judi": 0,
+          "tp": 0,
+          "recall": null,
+          "ci95_wilson": null
+        }
+      },
+      "recall_per_kelompok_test_plus_holdout": {
+        "AUDIT_LABEL0": {
+          "n_judi": 1,
+          "tp": 1,
+          "recall": 1.0
+        },
+        "DORK_MESIN_PENCARI": {
+          "n_judi": 7,
+          "tp": 7,
+          "recall": 1.0
+        },
+        "INDEPENDEN_NON_GOOGLE": {
+          "n_judi": 102,
+          "tp": 94,
+          "recall": 0.9216
+        },
+        "TIDAK_DIKETAHUI": {
+          "n_judi": 4,
+          "tp": 4,
+          "recall": 1.0
+        },
+        "TURUNAN_DARI_ROOT_TEMUAN_AWAL": {
+          "n_judi": 54,
+          "tp": 53,
+          "recall": 0.9815
+        }
+      },
+      "fisher_recall_nondork_vs_reguler_test": {
+        "tabel[[TP,FN]nondork,[TP,FN]reguler]": [
+          [
+            47,
+            3
+          ],
+          [
+            65,
+            1
+          ]
+        ],
+        "p_value": 0.3134836866615598,
+        "selisih_recall(nondork-reguler)": -0.0448
+      },
+      "fisher_recall_nondork_vs_reguler_test+holdout": {
+        "tabel[[TP,FN]nondork,[TP,FN]reguler]": [
+          [
+            94,
+            8
+          ],
+          [
+            65,
+            1
+          ]
+        ],
+        "p_value": 0.09057994298663527,
+        "selisih_recall(nondork-reguler)": -0.0633
+      },
+      "metrik_subset_(positif subset + semua normal split)": {
+        "test_nondork": {
+          "n": 155,
+          "n_judi": 50,
+          "accuracy": 0.9806451612903225,
+          "precision_judi": 1.0,
+          "recall_judi": 0.94,
+          "f1_judi": 0.9690721649484536,
+          "roc_auc": 0.9988571428571429,
+          "fpr": 0.0,
+          "tn": 105,
+          "fp": 0,
+          "fn": 3,
+          "tp": 47
+        },
+        "test_reguler": {
+          "n": 171,
+          "n_judi": 66,
+          "accuracy": 0.9941520467836257,
+          "precision_judi": 1.0,
+          "recall_judi": 0.9848484848484849,
+          "f1_judi": 0.9923664122137404,
+          "roc_auc": 1.0,
+          "fpr": 0.0,
+          "tn": 105,
+          "fp": 0,
+          "fn": 1,
+          "tp": 65
+        },
+        "holdout_nondork": {
+          "n": 105,
+          "n_judi": 52,
+          "accuracy": 0.9428571428571428,
+          "precision_judi": 0.9791666666666666,
+          "recall_judi": 0.9038461538461539,
+          "f1_judi": 0.94,
+          "roc_auc": 0.9876632801161103,
+          "fpr": 0.018867924528301886,
+          "tn": 52,
+          "fp": 1,
+          "fn": 5,
+          "tp": 47
+        },
+        "holdout_reguler": {
+          "n": 53,
+          "catatan": "tidak ada halaman judi pada subset ini"
+        }
+      }
+    },
+    "lightgbm": {
+      "recall_per_subset": {
+        "test_nondork": {
+          "n_judi": 50,
+          "tp": 49,
+          "recall": 0.98,
+          "ci95_wilson": [
+            0.895,
+            0.9965
+          ]
+        },
+        "test_reguler": {
+          "n_judi": 66,
+          "tp": 64,
+          "recall": 0.9697,
+          "ci95_wilson": [
+            0.8961,
+            0.9917
+          ]
+        },
+        "holdout_nondork": {
+          "n_judi": 52,
+          "tp": 51,
+          "recall": 0.9808,
+          "ci95_wilson": [
+            0.8988,
+            0.9966
+          ]
+        },
+        "holdout_reguler": {
+          "n_judi": 0,
+          "tp": 0,
+          "recall": null,
+          "ci95_wilson": null
+        }
+      },
+      "recall_per_kelompok_test_plus_holdout": {
+        "AUDIT_LABEL0": {
+          "n_judi": 1,
+          "tp": 1,
+          "recall": 1.0
+        },
+        "DORK_MESIN_PENCARI": {
+          "n_judi": 7,
+          "tp": 7,
+          "recall": 1.0
+        },
+        "INDEPENDEN_NON_GOOGLE": {
+          "n_judi": 102,
+          "tp": 100,
+          "recall": 0.9804
+        },
+        "TIDAK_DIKETAHUI": {
+          "n_judi": 4,
+          "tp": 4,
+          "recall": 1.0
+        },
+        "TURUNAN_DARI_ROOT_TEMUAN_AWAL": {
+          "n_judi": 54,
+          "tp": 52,
+          "recall": 0.963
+        }
+      },
+      "fisher_recall_nondork_vs_reguler_test": {
+        "tabel[[TP,FN]nondork,[TP,FN]reguler]": [
+          [
+            49,
+            1
+          ],
+          [
+            64,
+            2
+          ]
+        ],
+        "p_value": 1.0,
+        "selisih_recall(nondork-reguler)": 0.0103
+      },
+      "fisher_recall_nondork_vs_reguler_test+holdout": {
+        "tabel[[TP,FN]nondork,[TP,FN]reguler]": [
+          [
+            100,
+            2
+          ],
+          [
+            64,
+            2
+          ]
+        ],
+        "p_value": 0.646077895843425,
+        "selisih_recall(nondork-reguler)": 0.0107
+      },
+      "metrik_subset_(positif subset + semua normal split)": {
+        "test_nondork": {
+          "n": 155,
+          "n_judi": 50,
+          "accuracy": 0.9935483870967742,
+          "precision_judi": 1.0,
+          "recall_judi": 0.98,
+          "f1_judi": 0.98989898989899,
+          "roc_auc": 0.9927619047619047,
+          "fpr": 0.0,
+          "tn": 105,
+          "fp": 0,
+          "fn": 1,
+          "tp": 49
+        },
+        "test_reguler": {
+          "n": 171,
+          "n_judi": 66,
+          "accuracy": 0.9883040935672515,
+          "precision_judi": 1.0,
+          "recall_judi": 0.9696969696969697,
+          "f1_judi": 0.9846153846153847,
+          "roc_auc": 0.997979797979798,
+          "fpr": 0.0,
+          "tn": 105,
+          "fp": 0,
+          "fn": 2,
+          "tp": 64
+        },
+        "holdout_nondork": {
+          "n": 105,
+          "n_judi": 52,
+          "accuracy": 0.9904761904761905,
+          "precision_judi": 1.0,
+          "recall_judi": 0.9807692307692307,
+          "f1_judi": 0.9902912621359223,
+          "roc_auc": 1.0,
+          "fpr": 0.0,
+          "tn": 53,
+          "fp": 0,
+          "fn": 1,
+          "tp": 51
+        },
+        "holdout_reguler": {
+          "n": 53,
+          "catatan": "tidak ada halaman judi pada subset ini"
+        }
+      }
+    }
+  },
+  "holdout_komposisi": {
+    "halaman": 105,
+    "judi": 52,
+    "judi_nondork": 52,
+    "persen_judi_nondork_dari_judi_holdout": 100.0,
+    "persen_judi_nondork_dari_seluruh_holdout": 49.5
+  },
+  "feature_importance": {
+    "top30_struktural": 3,
+    "total_importance_struktural": 0.03985476724262543,
+    "top10": [
+      {
+        "fitur": "slot gacor",
+        "importance": 0.036718471471508696,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "slot",
+        "importance": 0.03516988516752643,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "gacor",
+        "importance": 0.030275935303918845,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "gacor slot",
+        "importance": 0.021166270375565864,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "login",
+        "importance": 0.01819354764268583,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "FLNK_02_ext_ratio",
+        "importance": 0.01680986720890922,
+        "jenis": "struktural"
+      },
+      {
+        "fitur": "situs",
+        "importance": 0.015294856337487568,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "com",
+        "importance": 0.0149046356857965,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "slot slot",
+        "importance": 0.012983475638165643,
+        "jenis": "tfidf"
+      },
+      {
+        "fitur": "menang",
+        "importance": 0.012461938947288415,
+        "jenis": "tfidf"
+      }
+    ]
+  }
+}
