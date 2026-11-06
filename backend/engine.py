@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 import time
 from pathlib import Path
 from urllib.parse import urlparse
@@ -27,6 +28,7 @@ from urllib.parse import urlparse
 BASE = Path(__file__).resolve().parent
 MODEL_DIR = BASE / "models"
 MAX_WORDS = 5000
+MAX_TEXT_CHARS = 80000  # extension mengirim maks 60.000; batas server mencegah teks raksasa (stopword removal O(n))
 
 with open(BASE / "lexicon.json", encoding="utf-8") as _f:
     LEX = json.load(_f)
@@ -134,24 +136,56 @@ def _flush_stem_cache():
         pass
 
 
+_STEM_LOCK = threading.Lock()
+STEM_BUDGET_S = 1.0     # waktu maks untuk men-stem kata BARU per permintaan (lihat normalize_text_ex)
+MAX_TOKEN_LEN = 30      # token lebih panjang bukan kata bahasa Indonesia (mis. string acak/base64); stemmer jadi sangat lambat
+
+
 def _stem(word: str) -> str:
     s = _STEM_CACHE.get(word)
     if s is None:
-        s = _state["stemmer"].stem(word)
-        _STEM_CACHE[word] = s
-        _STEM_NEW[word] = s
-        if len(_STEM_NEW) >= 300:
-            _flush_stem_cache()
+        with _STEM_LOCK:
+            s = _STEM_CACHE.get(word)
+            if s is None:
+                s = _state["stemmer"].stem(word)
+                _STEM_CACHE[word] = s
+                _STEM_NEW[word] = s
+                if len(_STEM_NEW) >= 300:
+                    _flush_stem_cache()
     return s
 
 
-def normalize_text(text: str) -> str:
-    """Replika 03_cleaning_normalisasi.normalize_text (urutan sama)."""
+def normalize_text_ex(text: str, budget_s: float = None):
+    """Replika 03_cleaning_normalisasi.normalize_text (urutan sama) + anggaran waktu stemming.
+
+    Stemming Sastrawi ~10 ms/kata dan halaman 5000 kata dengan ribuan kata baru bisa >30 detik. Agar respons
+    < 2 detik (TC-06): kata yang sudah ada di cache di-stem persis seperti training; kata BARU di-stem sampai
+    anggaran habis, sisanya dipakai apa adanya (belum di-stem); kata yang sudah di-stem tersimpan di cache sehingga
+    pemindaian/kunjungan berikutnya semakin tepat dan cepat. Mengembalikan (teks_bersih, jumlah_kata_tidak_di_stem)."""
+    budget_s = STEM_BUDGET_S if budget_s is None else budget_s
     text = (text or "").lower()
     text = re.sub(r"[^a-z\s]", " ", text)
     text = re.sub(r"\s+", " ", text).strip()
     text = _state["stopword"].remove(text)
-    return " ".join(_stem(w) for w in text.split()[:MAX_WORDS])
+    deadline = time.perf_counter() + budget_s
+    out, approx = [], 0
+    for w in text.split()[:MAX_WORDS]:
+        s = _STEM_CACHE.get(w)
+        if s is None:
+            if len(w) > MAX_TOKEN_LEN:
+                s = w
+                approx += 1
+            elif time.perf_counter() > deadline:
+                s = w
+                approx += 1
+            else:
+                s = _stem(w)
+        out.append(s)
+    return " ".join(out), approx
+
+
+def normalize_text(text: str) -> str:
+    return normalize_text_ex(text, budget_s=1e9)[0]  # tanpa anggaran: persis training (dipakai tes paritas)
 
 
 # ---------------------------------------------------------------- structural
@@ -264,8 +298,8 @@ def predict(data: dict, model_name: str = "random_forest", threshold: float = 0.
     threshold = min(max(float(threshold), 0.05), 0.95)
 
     t0 = time.perf_counter()
-    raw_text = data.get("text") or ""
-    clean = normalize_text(raw_text)
+    raw_text = (data.get("text") or "")[:MAX_TEXT_CHARS]
+    clean, stem_approx = normalize_text_ex(raw_text)
     t1 = time.perf_counter()
 
     X_text = st["vectorizer"].transform([clean])
@@ -337,5 +371,6 @@ def predict(data: dict, model_name: str = "random_forest", threshold: float = 0.
             "total": round((time.perf_counter() - t0) * 1000, 1),
         },
         "n_words_clean": len(clean.split()),
+        "stem_approx": stem_approx,
         "model_version": f"{model_name}-final",
     }

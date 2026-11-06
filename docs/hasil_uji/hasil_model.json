@@ -1,0 +1,281 @@
+{
+  "dibuat": "2026-11-06 07:35:16",
+  "integritas_model": {
+    "model.pkl": {
+      "repo": "187b55af7d05794f",
+      "training_final": "187b55af7d05794f",
+      "identik": true
+    },
+    "model_lightgbm.pkl": {
+      "repo": "9a9e1a673856877c",
+      "training_final": "9a9e1a673856877c",
+      "identik": true
+    },
+    "vectorizer.pkl": {
+      "repo": "cbb2494a7451a533",
+      "training_final": "cbb2494a7451a533",
+      "identik": true
+    },
+    "scaler.pkl": {
+      "repo": "fe15d31e25a311ce",
+      "training_final": "fe15d31e25a311ce",
+      "identik": true
+    }
+  },
+  "data": {
+    "train": {
+      "halaman": 712,
+      "judi": 348,
+      "normal": 364,
+      "domain": 230
+    },
+    "test": {
+      "halaman": 221,
+      "judi": 116,
+      "normal": 105,
+      "domain": 70
+    },
+    "holdout": {
+      "halaman": 105,
+      "judi": 52,
+      "normal": 53,
+      "domain": 30
+    }
+  },
+  "tc01_02_03": {
+    "random_forest": {
+      "test": {
+        "n": 221,
+        "n_judi": 116,
+        "accuracy": 0.9819,
+        "precision": 1.0,
+        "recall": 0.9655,
+        "f1": 0.9825,
+        "roc_auc": 0.9995,
+        "fpr": 0.0,
+        "tn": 105,
+        "fp": 0,
+        "fn": 4,
+        "tp": 112
+      },
+      "holdout": {
+        "n": 105,
+        "n_judi": 52,
+        "accuracy": 0.9429,
+        "precision": 0.9792,
+        "recall": 0.9038,
+        "f1": 0.94,
+        "roc_auc": 0.9877,
+        "fpr": 0.0189,
+        "tn": 52,
+        "fp": 1,
+        "fn": 5,
+        "tp": 47
+      }
+    },
+    "lightgbm": {
+      "test": {
+        "n": 221,
+        "n_judi": 116,
+        "accuracy": 0.9864,
+        "precision": 1.0,
+        "recall": 0.9741,
+        "f1": 0.9869,
+        "roc_auc": 0.9957,
+        "fpr": 0.0,
+        "tn": 105,
+        "fp": 0,
+        "fn": 3,
+        "tp": 113
+      },
+      "holdout": {
+        "n": 105,
+        "n_judi": 52,
+        "accuracy": 0.9905,
+        "precision": 1.0,
+        "recall": 0.9808,
+        "f1": 0.9903,
+        "roc_auc": 1.0,
+        "fpr": 0.0,
+        "tn": 53,
+        "fp": 0,
+        "fn": 1,
+        "tp": 51
+      }
+    }
+  },
+  "reproduksi_laporan_training": true,
+  "tc04_mcnemar": {
+    "test": {
+      "a_kedua_benar": 215,
+      "b_rf_benar_lgbm_salah": 2,
+      "c_rf_salah_lgbm_benar": 3,
+      "e_kedua_salah": 1,
+      "p_value": 1.0,
+      "bermakna_alpha_005": false
+    },
+    "holdout": {
+      "a_kedua_benar": 99,
+      "b_rf_benar_lgbm_salah": 0,
+      "c_rf_salah_lgbm_benar": 5,
+      "e_kedua_salah": 1,
+      "p_value": 0.0625,
+      "bermakna_alpha_005": false
+    }
+  },
+  "tc06_nondork": {
+    "random_forest": {
+      "recall_nondork_test": {
+        "tp": 47,
+        "n": 50,
+        "recall": 0.94,
+        "ci95": [
+          0.8378,
+          0.9794
+        ]
+      },
+      "recall_reguler_test": {
+        "tp": 65,
+        "n": 66,
+        "recall": 0.9848,
+        "ci95": [
+          0.919,
+          0.9973
+        ]
+      },
+      "recall_nondork_holdout": {
+        "tp": 47,
+        "n": 52,
+        "recall": 0.9038,
+        "ci95": [
+          0.7939,
+          0.9582
+        ]
+      },
+      "recall_nondork_gabungan": {
+        "tp": 94,
+        "n": 102,
+        "recall": 0.9216,
+        "ci95": [
+          0.8528,
+          0.9597
+        ]
+      },
+      "fisher_p_test": 0.3135,
+      "fisher_p_gabungan_vs_reguler": 0.0906,
+      "precision_nondork_plus_semua_normal": 0.9895,
+      "f1_nondork_plus_semua_normal": 0.9543
+    },
+    "lightgbm": {
+      "recall_nondork_test": {
+        "tp": 49,
+        "n": 50,
+        "recall": 0.98,
+        "ci95": [
+          0.895,
+          0.9965
+        ]
+      },
+      "recall_reguler_test": {
+        "tp": 64,
+        "n": 66,
+        "recall": 0.9697,
+        "ci95": [
+          0.8961,
+          0.9917
+        ]
+      },
+      "recall_nondork_holdout": {
+        "tp": 51,
+        "n": 52,
+        "recall": 0.9808,
+        "ci95": [
+          0.8988,
+          0.9966
+        ]
+      },
+      "recall_nondork_gabungan": {
+        "tp": 100,
+        "n": 102,
+        "recall": 0.9804,
+        "ci95": [
+          0.9313,
+          0.9946
+        ]
+      },
+      "fisher_p_test": 1.0,
+      "fisher_p_gabungan_vs_reguler": 0.6461,
+      "precision_nondork_plus_semua_normal": 1.0,
+      "f1_nondork_plus_semua_normal": 0.9901
+    }
+  },
+  "tc05_inference": {
+    "jumlah_halaman": 326,
+    "random_forest": {
+      "roundtrip_http_ms": {
+        "rata_rata": 444.1,
+        "median": 273.6,
+        "p95": 1142.9,
+        "maks": 1594.3,
+        "min": 28.7
+      },
+      "server_total_ms": {
+        "rata_rata": 439.8,
+        "median": 265.5,
+        "p95": 1136.4,
+        "maks": 1577.8,
+        "min": 26.8
+      },
+      "preprocess_ms": {
+        "rata_rata": 399.9,
+        "median": 236.2,
+        "p95": 1075.9,
+        "maks": 1192.7,
+        "min": 0.1
+      },
+      "predict_ms": {
+        "rata_rata": 16.6,
+        "median": 13.4,
+        "p95": 31.4,
+        "maks": 256.1,
+        "min": 11.8
+      },
+      "paritas_label_dengan_offline": "326/326",
+      "selisih_p_judi_maks": 0.0235,
+      "selisih_p_judi_rata2": 0.00044
+    },
+    "lightgbm": {
+      "roundtrip_http_ms": {
+        "rata_rata": 197.4,
+        "median": 10.9,
+        "p95": 1086.1,
+        "maks": 1593.9,
+        "min": 3.4
+      },
+      "server_total_ms": {
+        "rata_rata": 194.7,
+        "median": 8.8,
+        "p95": 1083.9,
+        "maks": 1577.6,
+        "min": 1.9
+      },
+      "preprocess_ms": {
+        "rata_rata": 180.3,
+        "median": 2.0,
+        "p95": 1059.1,
+        "maks": 1161.6,
+        "min": 0.1
+      },
+      "predict_ms": {
+        "rata_rata": 5.8,
+        "median": 2.7,
+        "p95": 20.7,
+        "maks": 244.1,
+        "min": 1.4
+      },
+      "paritas_label_dengan_offline": "326/326",
+      "selisih_p_judi_maks": 0.0024,
+      "selisih_p_judi_rata2": 2e-05
+    }
+  }
+}
