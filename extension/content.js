@@ -24,11 +24,6 @@
   const MAX_RESCANS = 6;
   const MIN_INTERVAL_MS = 8000;
 
-  const whitelisted = (list) => (list || []).some((d) => {
-    d = (d || "").trim().toLowerCase();
-    return d && (location.hostname === d || location.hostname.endsWith("." + d));
-  });
-
   function signature() {
     const b = document.body;
     return {
@@ -55,11 +50,11 @@
       const clientMs = Math.round(performance.now() - t0);
       payload.trigger = trigger;
       renderPending();
-      const resp = await send({ type: "SCAN", payload, clientMs });
+      const resp = await send({ type: "SCAN", payload, clientMs, client: ev.visible });
       lastScanAt = Date.now();
       lastUrl = location.href;
       if (resp && resp.ok) {
-        last = { result: resp.result, ev, lev, timing: resp.timing };
+        last = { result: resp.result, ev, lev, timing: resp.timing, client: ev.visible };
         dismissed = false;
         applyResult();
       } else {
@@ -83,7 +78,7 @@
     if (settings.highlight && highlightOn && r.label !== "aman") {
       marksCount = window.DJO.highlight(last.ev, last.lev);
     }
-    const show = settings.banner === "always" || (settings.banner === "risk" && r.label !== "aman");
+    const show = r.label !== "aman";
     if (show && !dismissed) renderBanner(); else removeUI();
   }
 
@@ -116,24 +111,24 @@
   const CSS = `
     :host{all:initial}
     *{box-sizing:border-box;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
-    .wrap{position:fixed;right:16px;bottom:16px;z-index:2147483647;max-width:360px;font-size:13px;color:#111827}
-    .pill{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;cursor:pointer;border:0;color:#fff;
-      font-weight:600;box-shadow:0 4px 14px rgba(0,0,0,.28);font-size:13px}
-    .danger{background:#dc2626}.warn{background:#d97706}.safe{background:#15803d}.err{background:#4b5563}.load{background:#2563eb}
-    .panel{background:#fff;border:1px solid #d1d5db;border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.3);padding:14px;margin-bottom:8px;max-height:60vh;overflow:auto}
-    .panel h4{margin:0 0 6px;font-size:14px}
-    .panel p{margin:4px 0;line-height:1.4}
-    .bar{height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;margin:6px 0 10px}
-    .bar>i{display:block;height:100%}
-    .chip{display:inline-block;margin:2px 3px 2px 0;padding:2px 8px;border-radius:10px;background:#fee2e2;color:#991b1b;font-size:12px}
-    .chip.w{background:#fef3c7;color:#92400e}
-    .hid{border-left:3px solid #d97706;padding:3px 8px;margin:4px 0;background:#fffbeb;font-size:12px}
-    .row{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-    .btn{border:1px solid #9ca3af;background:#f9fafb;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;color:#111827}
-    .btn:hover{background:#e5e7eb}
-    ul{margin:4px 0 4px 16px;padding:0}
-    small{color:#6b7280}
+    .wrap{position:fixed;right:16px;bottom:16px;z-index:2147483647;width:300px;font-size:14px;color:#111827;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+    .dot{width:48px;height:48px;border-radius:50%;border:0;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 12px rgba(0,0,0,.3)}
+    .dot.danger{background:#dc2626;box-shadow:0 0 0 5px #dc262644,0 3px 12px rgba(0,0,0,.3)}
+    .dot.warn{background:#f59e0b;box-shadow:0 0 0 5px #f59e0b44,0 3px 12px rgba(0,0,0,.3)}
+    .dot.err{background:#6b7280}.dot.load{background:#2563eb}
+    .panel{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:14px;box-shadow:0 8px 28px rgba(0,0,0,.3);padding:14px 16px}
+    .word{font-size:19px;font-weight:800;letter-spacing:.03em}
+    .sent{color:#374151;margin:2px 0 8px}
+    .chk{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid #e5e7eb}
+    .chk i{width:22px;height:22px;border-radius:50%;color:#fff;font-style:normal;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex:none}
+    .chk span{flex:1}.chk b{font-weight:700}
+    .row{display:flex;gap:8px;margin-top:10px}
+    .btn{flex:1;border:1px solid #d1d5db;background:#fff;border-radius:9px;padding:8px 10px;cursor:pointer;font-size:13px;font-weight:600;color:#111827}
+    .btn.p{background:#0f766e;border-color:#0f766e;color:#fff}
+    .note{margin-top:8px;color:#6b7280;font-size:11.5px}
   `;
+  const COL = ["#15803d", "#b45309", "#dc2626"];
+  const SHIELD_SVG = '<svg width="26" height="26" viewBox="0 0 24 24"><path fill="#fff" d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="M12 7v6M12 16v.5" stroke="COLOR" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>';
 
   function el(tag, props = {}, ...kids) {
     const e = document.createElement(tag);
@@ -163,57 +158,46 @@
     if (ui) { ui.host.remove(); ui = null; }
   }
 
-  function pill(cls, text) {
-    return el("button", { class: "pill " + cls, title: "Klik untuk detail", onclick: () => { ensureUI().open = !ui.open; renderBanner(); } }, "🛡 ", text);
+  function dot(cls, title, color) {
+    const b = el("button", { class: "dot " + cls, title, "aria-label": title, onclick: () => { ensureUI().open = !ui.open; renderBanner(); } });
+    b.innerHTML = SHIELD_SVG.replace("COLOR", color || "#6b7280");
+    return b;
   }
   function renderPending() {
     if (!settings || settings.banner === "never") return;
     if (!ui) return; // jangan memunculkan UI baru saat pemindaian otomatis pertama
-    ui.wrap.replaceChildren(el("button", { class: "pill load" }, "🛡 Memindai ulang…"));
+    ui.wrap.replaceChildren(dot("load", "Memeriksa ulang…", "#2563eb"));
   }
   function renderError(msg) {
     if (!settings || settings.banner === "never") return;
     if (!ui && !(trigger_manual)) return; // galat saat auto-scan dibiarkan senyap; status ada di popup
     const u = ensureUI();
     u.wrap.replaceChildren(
-      u.open ? el("div", { class: "panel" }, el("h4", {}, "Pemindaian gagal"), el("p", {}, msg),
-        el("div", { class: "row" }, el("button", { class: "btn", onclick: () => scan("manual") }, "Coba lagi"))) : null,
-      pill("err", "Deteksi judi: tidak terhubung"),
+      u.open ? el("div", { class: "panel" }, el("div", { class: "word", style: "color:#4b5563" }, "Tidak bisa memeriksa"), el("p", {}, msg),
+        el("div", { class: "row" }, el("button", { class: "btn p", onclick: () => scan("manual") }, "Coba lagi"))) : null,
+      dot("err", "Tidak terhubung ke server", "#6b7280"),
     );
   }
   let trigger_manual = false;
 
   function renderBanner() {
     if (!last) return;
-    const r = last.result;
     const u = ensureUI();
-    const cls = r.label === "judi" ? "danger" : r.label === "waspada" ? "warn" : "safe";
-    const title = r.label === "judi" ? "Terindikasi konten judi" : r.label === "waspada" ? "Waspada: perlu dicek" : "Aman";
-    const p = Math.round(r.ml.p_judi * 100);
+    const sm = window.DJOSUM.summarize({ result: last.result, client: last.client });
+    const cls = sm.lvl === 2 ? "danger" : "warn";
     const kids = [];
     if (u.open) {
-      const strong = Object.entries(r.evidence.keywords_strong || {});
-      const weak = Object.entries(r.evidence.keywords_weak || {});
-      const color = r.label === "judi" ? "#dc2626" : r.label === "waspada" ? "#d97706" : "#15803d";
       kids.push(el("div", { class: "panel" },
-        el("h4", {}, title),
-        el("small", {}, `Peluang judi (model ${r.ml.model.replace("_", " ")}): ${p}% · ambang ${Math.round(r.ml.threshold * 100)}%`),
-        el("div", { class: "bar" }, el("i", { style: `width:${p}%;background:${color}` })),
-        ...r.reasons.map((t) => el("p", {}, "• ", t)),
-        strong.length ? el("p", {}, strong.slice(0, 8).map(([k, v]) => el("span", { class: "chip" }, `${k} ×${v}`))) : null,
-        weak.length ? el("p", {}, weak.slice(0, 6).map(([k, v]) => el("span", { class: "chip w" }, `${k} ×${v}`))) : null,
-        (r.evidence.hidden || []).length ? el("div", {}, el("p", {}, el("b", {}, "Elemen tersembunyi:")),
-          ...r.evidence.hidden.slice(0, 4).map((h) => el("div", { class: "hid" }, `<${h.tag}> ${h.reason} — “${h.snippet}”`))) : null,
-        (r.evidence.judi_links || []).length ? el("p", {}, el("b", {}, "Tautan keluar mencurigakan: "), r.evidence.judi_links.slice(0, 4).join(", ")) : null,
-        el("small", {}, `Sorotan di halaman: ${marksCount} · analisis ${r.timing_ms.total} ms`),
+        el("div", { class: "word", style: `color:${sm.color}` }, sm.word),
+        el("div", { class: "sent" }, sm.sentence),
+        ...sm.rows.map((x) => el("div", { class: "chk" }, el("i", { style: `background:${COL[x.level]}` }, ["✓", "!", "✕"][x.level]), el("span", {}, x.name), el("b", { style: `color:${COL[x.level]}` }, x.text))),
         el("div", { class: "row" },
-          el("button", { class: "btn", onclick: toggleHighlight }, highlightOn ? "Matikan sorotan" : "Tampilkan sorotan"),
-          el("button", { class: "btn", onclick: () => scan("manual") }, "Pindai ulang"),
-          el("button", { class: "btn", onclick: () => { dismissed = true; removeUI(); } }, "Tutup"),
-        ),
+          el("button", { class: "btn p", onclick: toggleHighlight }, highlightOn ? "Sembunyikan tanda" : "Lihat di halaman"),
+          el("button", { class: "btn", onclick: () => { dismissed = true; removeUI(); } }, "Tutup")),
+        el("div", { class: "note" }, "Hasil ini perkiraan komputer, bukan keputusan akhir."),
       ));
     }
-    kids.push(pill(cls, `${title} · ${p}%`));
+    kids.push(dot(cls, `${sm.word} — klik untuk detail`, sm.color));
     u.wrap.replaceChildren(...kids);
   }
 
@@ -253,7 +237,7 @@
       settings = await send({ type: "GET_SETTINGS" });
     } catch { return; }
     highlightOn = !!settings.highlight;
-    if (isAc && settings.autoScan && !whitelisted(settings.whitelist)) {
+    if (isAc && settings.autoScan) {
       autoMode = true;
       const go = () => setTimeout(() => scan("load").then(() => { if (settings.watchChanges) startObserver(); }), 400);
       if (document.readyState === "complete") go(); else window.addEventListener("load", go, { once: true });

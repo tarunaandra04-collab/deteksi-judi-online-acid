@@ -122,6 +122,7 @@
     const nodes = [];               // {node, ranges:[[s,e]], hidden:reason|null}
     const hidden = [];              // sampel elemen tersembunyi
     const seenHiddenEl = new Set();
+    const visible = { strong: new Set(), weak: new Set() };   // kata judi pada teks yang tampak bagi pengunjung
     const w = textWalker(document.body || document.documentElement);
     let n, total = 0;
     while ((n = w.nextNode())) {
@@ -137,7 +138,10 @@
       if (!ranges.length) continue;
       const parent = n.parentElement;
       const reason = concealReason(parent);
-      for (const r of ranges) keywords[r[2]] = (keywords[r[2]] || 0) + 1;
+      for (const r of ranges) {
+        keywords[r[2]] = (keywords[r[2]] || 0) + 1;
+        if (!reason) (WEAK.has(r[2]) ? visible.weak : visible.strong).add(r[2]);
+      }
       total += ranges.length;
       nodes.push({ node: n, ranges, hidden: reason });
       if (reason && parent && !seenHiddenEl.has(parent) && hidden.length < 10) {
@@ -151,7 +155,7 @@
       }
       if (nodes.length >= 800) break;
     }
-    return { keywords, nodes, hidden, total };
+    return { keywords, nodes, hidden, total, visible: { strong: [...visible.strong], weak: [...visible.weak] } };
   }
 
   function collectLinkEvidence() {

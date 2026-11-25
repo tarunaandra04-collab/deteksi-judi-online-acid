@@ -109,12 +109,8 @@ def main():
         pop.goto(f"chrome-extension://{ext_id}/popup.html?tab={res['tabId']}")
         pop.wait_for_timeout(800)
         txt = pop.inner_text("#content")
-        check("popup menampilkan hasil + alasan", "peluang konten judi" in txt.lower() and "mengapa hasilnya begini" in txt.lower())
+        check("popup menampilkan hasil + alasan", "hasil pemeriksaan" in txt.lower() and "ada judi" in txt.lower())
         pop.screenshot(path=str(OUT / "popup_judi_tersembunyi.png"), full_page=True)
-
-        # --- riwayat tersimpan ---
-        hist = sw.evaluate("async () => (await chrome.storage.local.get('history')).history || []")
-        check("riwayat tersimpan (3 pemindaian)", len(hist) >= 3, f"{len(hist)} entri")
 
         # --- server mati / galat: alamat API salah ---
         sw.evaluate("async () => { const s={apiUrl:'http://127.0.0.1:5999'}; const cur=(await chrome.storage.local.get('settings')).settings||{}; await chrome.storage.local.set({settings:{...cur,...s}}); }")

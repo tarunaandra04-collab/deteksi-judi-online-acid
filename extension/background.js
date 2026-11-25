@@ -1,5 +1,5 @@
 // background.js (service worker, ES module)
-// Menjembatani content.js dengan Flask API lokal, mengatur badge ikon, dan menyimpan riwayat.
+// Menjembatani content.js dengan Flask API lokal dan mengatur badge ikon.
 import { getSettings, RISK_META } from "./defaults.js";
 
 const FETCH_TIMEOUT_MS = 25000;
@@ -10,12 +10,6 @@ async function setBadge(tabId, text, color) {
     await chrome.action.setBadgeText({ tabId, text });
     if (color) await chrome.action.setBadgeBackgroundColor({ tabId, color });
   } catch { /* tab mungkin sudah ditutup */ }
-}
-
-async function pushHistory(entry, max) {
-  const { history = [] } = await chrome.storage.local.get("history");
-  history.unshift(entry);
-  await chrome.storage.local.set({ history: history.slice(0, max) });
 }
 
 async function handleScan(msg, sender) {
@@ -48,29 +42,13 @@ async function handleScan(msg, sender) {
       at: Date.now(),
       trigger: msg.payload.trigger || "load",
       result: json,
+      client: msg.client || { strong: [], weak: [] },
       timing: { client_extract: msg.clientMs || 0, api_roundtrip: apiMs, end_to_end: totalMs },
     };
     await chrome.storage.session.set({ [`state_${tabId}`]: record });
     const meta = RISK_META[json.label] || RISK_META.aman;
     await setBadge(tabId, meta.badge, meta.color);
 
-    if (settings.saveHistory) {
-      await pushHistory({
-        t: record.at,
-        url: record.url,
-        host: msg.payload.domain,
-        label: json.label,
-        risk: json.risk,
-        p_judi: json.ml.p_judi,
-        model: json.ml.model,
-        kw_strong: Object.values(json.evidence.keywords_strong || {}).reduce((a, b) => a + b, 0),
-        hidden: (json.evidence.hidden || []).length,
-        judi_links: (json.evidence.judi_links || []).length,
-        ms_api: json.timing_ms.total,
-        ms_e2e: totalMs,
-        trigger: record.trigger,
-      }, settings.historyMax);
-    }
     return { ok: true, result: json, timing: record.timing };
   } catch (err) {
     const message = err.name === "AbortError"

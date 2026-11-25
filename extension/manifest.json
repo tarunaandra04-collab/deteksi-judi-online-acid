@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Deteksi Judi Online .ac.id",
-  "version": "2.0.0",
-  "description": "Mendeteksi konten judi online tersembunyi pada website berdomain .ac.id memakai model Random Forest/LightGBM lokal, lengkap dengan penanda bukti di halaman.",
+  "version": "3.0.0",
+  "description": "Memeriksa halaman website berdomain .ac.id dan memberi tahu pengguna apakah halaman tersebut berisi konten judi online (lampu hijau, kuning, atau merah).",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -17,19 +17,30 @@
       "32": "icons/icon32.png"
     }
   },
-  "options_page": "options.html",
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
     {
-      "matches": ["*://*.ac.id/*", "*://ac.id/*"],
-      "js": ["lexicon.js", "scanner.js", "content.js"],
+      "matches": [
+        "*://*.ac.id/*",
+        "*://ac.id/*"
+      ],
+      "js": [
+        "lexicon.js",
+        "scanner.js",
+        "ringkas.js",
+        "content.js"
+      ],
       "run_at": "document_idle"
     }
   ],
-  "permissions": ["storage", "activeTab", "scripting"],
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
   "host_permissions": [
     "*://*.ac.id/*",
     "*://ac.id/*",

@@ -35,13 +35,18 @@ grid([EV / "confusion_matrix_random_forest_test.png", EV / "confusion_matrix_ran
 # 2. feature importance (apa adanya)
 Image.open(EV / "feature_importance.png").convert("RGB").save(OUT / "feature_importance.png")
 
-# 3. dua popup berdampingan (aman | terindikasi)
-grid([SS / "uji_aman_popup.png", SS / "uji_tersembunyi_popup.png"], 2, OUT / "popup_aman_judi.png", pad=16)
+# 3. tiga popup berdampingan (aman | hati-hati | ada judi)
+grid([SS / "uji_aman_popup.png", SS / "uji_waspada_popup.png", SS / "uji_tersembunyi_popup.png"], 3, OUT / "popup_aman_judi.png", pad=16)
+from PIL import ImageChops  # potong ruang putih di bawah popup
+_im = Image.open(OUT / "popup_aman_judi.png").convert("RGB")
+_bb = ImageChops.difference(_im, Image.new("RGB", _im.size, "white")).getbbox()
+if _bb:
+    _im.crop((0, 0, _im.width, min(_im.height, _bb[3] + 20))).save(OUT / "popup_aman_judi.png")
 
 # 4. halaman uji dengan lencana (dipotong ke bagian atas agar ringkas) dan pengaturan
 im = Image.open(SS / "uji_tersembunyi_halaman.png").convert("RGB")
-im.crop((0, 0, im.width, 720)).save(OUT / "halaman_lencana.png")
-Image.open(SS / "pengaturan.png").convert("RGB").save(OUT / "pengaturan.png")
+im.crop((0, 0, im.width, 720)).save(OUT / "halaman_lencana_tanpa_panel.png")
+Image.open(SS / "uji_tersembunyi_panel.png").convert("RGB").save(OUT / "halaman_lencana.png")
 
 # 5. struktur folder dataset (dibuat dari angka final)
 tree = """data_final/

@@ -1,6 +1,6 @@
 {
   "channel": "msedge",
-  "dibuat": "2026-11-19 18:01:01",
+  "dibuat": "2026-11-26 02:11:12",
   "tc": {
     "TC-01": {
       "halaman": 25,
@@ -22,43 +22,43 @@
     "TC-06": {
       "e2e_ms": {
         "n": 50,
-        "rata_rata": 170.1,
-        "median": 109.5,
-        "p95": 440,
-        "min": 77,
-        "maks": 524
+        "rata_rata": 197.8,
+        "median": 90.5,
+        "p95": 723,
+        "min": 72,
+        "maks": 1228
       },
       "server_ms": {
         "n": 50,
-        "rata_rata": 25.5,
-        "median": 19.1,
-        "p95": 51.8,
-        "min": 14.7,
-        "maks": 100.5
+        "rata_rata": 81.7,
+        "median": 18.5,
+        "p95": 63.3,
+        "min": 14.8,
+        "maks": 1166.4
       },
       "ekstraksi_ms": {
         "n": 50,
-        "rata_rata": 12.4,
+        "rata_rata": 12.0,
         "median": 6.0,
-        "p95": 40,
+        "p95": 35,
         "min": 3,
-        "maks": 96
+        "maks": 100
       },
       "load_ke_hasil_ms": {
         "n": 50,
-        "rata_rata": 684.3,
-        "median": 633.0,
-        "p95": 938,
-        "min": 621,
-        "maks": 945
+        "rata_rata": 722.3,
+        "median": 630.5,
+        "p95": 1240,
+        "min": 622,
+        "maks": 1708
       },
       "popup_tampil_ms": {
         "n": 10,
-        "rata_rata": 97.9,
-        "median": 71.6,
-        "p95": 100.1,
-        "min": 56.5,
-        "maks": 333.7
+        "rata_rata": 69.7,
+        "median": 69.7,
+        "p95": 76.7,
+        "min": 59.3,
+        "maks": 89.4
       },
       "persen_di_bawah_2000ms_e2e": 100.0,
       "persen_di_bawah_2000ms_load_ke_hasil": 100.0
@@ -78,6 +78,7 @@
       "label": "judi",
       "p_judi": 1,
       "popup_menampilkan_elemen_tersembunyi": true,
+      "popup_jumlah_bagian": 5,
       "kontrol_negatif": {
         "elemen_tersembunyi_dilaporkan": 0,
         "has_hidden_fitur": 1,
@@ -85,10 +86,12 @@
       }
     },
     "TC-05": {
-      "persen_tampil_di_popup": true,
-      "nilai": "100.0%",
-      "label_tampil": true,
-      "cuplikan_popup": "ictmandalawaluya.ac.id | ⚠ Terindikasi konten judi | Model menilai halaman ini memuat konten judi online. | Peluang konten judi | 100.0% | MENGAPA HASILNYA BEGINI | Model r"
+      "kata_status_tampil": true,
+      "tiga_pemeriksaan_tampil": true,
+      "tanpa_persentase_dan_istilah_teknis": true,
+      "popup_kata_status_10_halaman": 10,
+      "popup_diperiksa": 10,
+      "cuplikan_popup": "ictmandalawaluya.ac.id | ADA JUDI | Halaman ini berisi konten judi online. | Hasil pemeriksaan | ✕ | Tulisan judi terlihat | 1 kata | ✕ | Tulisan judi tersembunyi | 10 bagian | ✕ | Tautan ke situs judi | 20 tautan | Sembunyika"
     },
     "TC-04": {
       "status_state": "error",
@@ -96,7 +99,7 @@
       "service_worker_hidup": true,
       "halaman_tetap_berfungsi": true,
       "popup_menampilkan_pesan": true,
-      "cuplikan_popup": "Tidak bisa menganalisis | Tidak bisa terhubung ke server lokal. Jalankan jalankan.ps1 (atau python backend/app.py). | Coba lagi | Cek pengaturan server",
+      "cuplikan_popup": "Tidak bisa memeriksa halaman | Tidak bisa terhubung ke server lokal. Jalankan jalankan.ps1 (atau python backend/app.py). | Coba lagi",
       "badge": "×"
     },
     "KONTEN_DINAMIS": {
@@ -111,7 +114,7 @@
         "label": "judi",
         "p_judi": 1,
         "error": null,
-        "ms_e2e": 386,
+        "ms_e2e": 70,
         "ms_ekstrak": 2,
         "dom_depth": 13,
         "tautan": 1
@@ -121,7 +124,7 @@
         "label": "aman",
         "p_judi": 0,
         "error": null,
-        "ms_e2e": 96,
+        "ms_e2e": 68,
         "ms_ekstrak": 1,
         "dom_depth": 3,
         "tautan": 0
@@ -131,7 +134,7 @@
         "label": "aman",
         "p_judi": 0,
         "error": null,
-        "ms_e2e": 171,
+        "ms_e2e": 79,
         "ms_ekstrak": 1,
         "dom_depth": 3,
         "tautan": 0
@@ -141,8 +144,8 @@
         "label": "aman",
         "p_judi": 0,
         "error": null,
-        "ms_e2e": 323,
-        "ms_ekstrak": 143,
+        "ms_e2e": 282,
+        "ms_ekstrak": 149,
         "dom_depth": 4,
         "tautan": 14000
       },
@@ -151,7 +154,7 @@
         "label": "judi",
         "p_judi": 1,
         "error": null,
-        "ms_e2e": 80,
+        "ms_e2e": 82,
         "ms_ekstrak": 5,
         "dom_depth": 513,
         "tautan": 0
@@ -159,22 +162,21 @@
       "service_worker_masih_hidup": true
     },
     "TC-07": {
-      "tes_koneksi_di_pengaturan": "✔ Terhubung (371 ms) | Model dimuat : lightgbm, random_forest | Dilatih pada : Python 3.14.0, scikit-learn 1.9.1 | Leksikon   ",
-      "browser": "Chrome/157.0.0.0",
+      "browser": "Chrome/158.0.0.0",
       "manifest_version": 3,
       "service_worker_aktif": true,
-      "galat_popup_options": [],
+      "galat_popup": [],
       "galat_service_worker": [],
       "jumlah_galat_total": 0
     }
   },
   "browser": {
-    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36 Edg/157.0.0.0",
-    "versi": "Chrome/157.0.0.0"
+    "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/158.0.0.0 Safari/537.36 Edg/158.0.0.0",
+    "versi": "Chrome/158.0.0.0"
   },
   "manifest": {
     "manifest_version": 3,
-    "versi_ekstensi": "2.0.0",
+    "versi_ekstensi": "3.0.0",
     "permissions": [
       "storage",
       "activeTab",
@@ -201,6 +203,5 @@
       "akurasi": 0.98
     },
     "halaman_gagal_dipindai": []
-  },
-  "riwayat_tersimpan": 60
+  }
 }

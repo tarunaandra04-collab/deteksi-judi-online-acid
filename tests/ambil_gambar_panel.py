@@ -41,7 +41,7 @@ with sync_playwright() as p:
     pg = ctx.new_page()
     pg.goto("https://uji-hidden.ac.id/")
     pg.wait_for_timeout(3500)
-    pg.mouse.click(1150, 686)      # lencana melayang di pojok kanan bawah (shadow DOM tertutup -> klik koordinat)
+    pg.mouse.click(1240, 680)      # lencana bulat di pojok kanan bawah (shadow DOM tertutup -> klik koordinat)
     pg.wait_for_timeout(1200)
     pg.screenshot(path=str(OUT))
     print("tersimpan:", OUT)

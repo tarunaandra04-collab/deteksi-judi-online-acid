@@ -31,8 +31,8 @@ Versi baru Edge/Chrome dapat membatasi `--load-extension`. Muat manual (1 menit)
 | TC-02 | Buka beranda universitas normal (mis. ui.ac.id) | Tidak ada lencana (atau "Aman" jika mode *Selalu tampilkan*), badge ikon `OK` |
 | TC-03 | Halaman dengan teks `display:none` berisi kata kunci | Panel menampilkan "Elemen tersembunyi" beserta alasan |
 | TC-04 | Matikan server (`-Stop`), muat ulang halaman | Popup: "Tidak bisa menganalisis… jalankan jalankan.ps1", ekstensi tidak crash |
-| TC-05 | Buka popup | Persentase peluang judi tampil bersama label dan penanda ambang |
-| TC-06 | Pengaturan → Riwayat | Kolom *E2E (ms)* terisi; rata-rata < 2000 ms |
+| TC-05 | Buka popup | Kata status (AMAN / HATI-HATI / ADA JUDI), lampu, dan tiga pemeriksaan tampil tanpa persentase |
+| TC-06 | Jalankan `python tests/uji_laporan_ekstensi.py --channel msedge` | Rata-rata waktu end-to-end < 2000 ms (hasil di `docs/hasil_uji/`) |
 | TC-07 | `edge://extensions` | Ekstensi aktif tanpa galat (Manifest V3) |
 
 Halaman uji lokal tanpa internet ada di `tests/halaman_uji/` (jalankan `python -m http.server 8080` di folder itu,
@@ -45,5 +45,5 @@ lalu pindai manual lewat tombol *Pindai halaman ini* — mode manual bekerja di 
 | Popup: "Tidak bisa terhubung ke server lokal" | Server belum jalan → `.\jalankan.ps1 -NoBrowser`; cek `backend.log.err` |
 | `/health` menunjukkan `model_loaded: false` | Versi scikit-learn tidak sama dengan saat training → `.\scripts\install.ps1 -Force` |
 | `jalankan.ps1 cannot be loaded… ExecutionPolicy` | Jalankan dengan `powershell -ExecutionPolicy Bypass -File .\jalankan.ps1` |
-| Port 5000 dipakai aplikasi lain | `.\jalankan.ps1 -Port 5050`, lalu ubah *Alamat API* di Pengaturan ekstensi |
-| Lencana tidak muncul di halaman aman | Memang bawaannya hanya muncul bila ada temuan; ubah di Pengaturan → *Selalu tampilkan* |
+| Port 5000 dipakai aplikasi lain | Hentikan aplikasi itu lalu jalankan ulang; ekstensi selalu memakai `http://127.0.0.1:5000` (tidak ada halaman pengaturan) |
+| Lencana tidak muncul di halaman aman | Memang hanya muncul bila ada temuan; hasil halaman aman dilihat lewat popup |

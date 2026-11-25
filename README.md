@@ -27,25 +27,27 @@ Jika browser menolak pemuatan otomatis, muat manual: `edge://extensions` → akt
 
 ## Apa yang dilakukan ekstensi
 
+Dirancang sederhana untuk pengguna awam (saran pembimbing): cukup tahu apakah halaman berisi judi atau tidak.
+
 | Fitur | Keterangan |
 |---|---|
 | Pindai otomatis `.ac.id` | Saat halaman selesai dimuat; dipindai ulang bila konten berubah (MutationObserver) atau URL berubah (SPA) |
-| Label tiga tingkat | **Aman**, **Waspada** (model bilang aman tetapi ada bukti aturan), **Terindikasi judi** |
-| Bukti, bukan sekadar skor | Kata kunci utuh + jumlah, elemen **tersembunyi** yang memuat kata kunci (display:none, opacity:0, font-size:0, di luar layar), tautan keluar bernama judi |
-| Sorotan di halaman | Kata kunci diberi tanda merah/kuning, tautan mencurigakan diberi garis putus-putus; lencana melayang dengan panel penjelasan |
-| Penjelasan model | Istilah TF-IDF yang paling memengaruhi hasil + alasan dalam bahasa Indonesia |
-| Mode manual di domain mana pun | Tombol "Pindai halaman ini" (izin `activeTab`, hanya tab aktif) — berguna untuk demo di halaman uji |
-| Pengaturan | Pilih model RF/LightGBM, ambang keputusan, domain dikecualikan, tampilan lencana |
-| Riwayat + ekspor CSV | Tanpa menyimpan isi halaman; kolom waktu end-to-end mendukung pengujian TC-05/TC-06 |
-| Salin laporan | Ringkasan temuan siap dikirim ke admin website |
+| Lampu lalu lintas | Popup menampilkan **AMAN** (hijau), **HATI-HATI** (kuning: model bilang aman tetapi ada bukti aturan), atau **ADA JUDI** (merah), dengan satu kalimat penjelasan |
+| Tiga pemeriksaan | *Tulisan judi terlihat*, *tulisan judi tersembunyi* (display:none, opacity:0, font-size:0, di luar layar), dan *tautan ke situs judi* — masing-masing bertanda centang, seru, atau silang |
+| Lihat di halaman | Tombol untuk menandai kata judi dan tautan mencurigakan langsung di halaman |
+| Lencana bulat | Muncul di pojok halaman hanya bila ada temuan; diklik membuka ringkasan yang sama |
+| Salin laporan | Ringkasan temuan (termasuk peluang model) siap dikirim ke admin website |
+| Mode manual di domain mana pun | Tombol "Periksa halaman ini" (izin `activeTab`, hanya tab aktif) — berguna untuk demo di halaman uji |
+
+Tidak ada halaman pengaturan, riwayat, atau persentase di antarmuka. Model bawaan: Random Forest (LightGBM tersedia di server sebagai pembanding).
 
 ## Arsitektur
 
 ```
 Halaman .ac.id ── content.js + scanner.js ──► background.js (service worker) ──HTTP POST──► Flask :5000 /predict
-   ▲   (ekstrak teks, tautan, DOM,                    │ badge ikon, riwayat                    │ engine.py: normalisasi Sastrawi,
+   ▲   (ekstrak teks, tautan, DOM,                    │ badge ikon                             │ engine.py: normalisasi Sastrawi,
    │    deteksi elemen tersembunyi)                   ▼                                        │ 8 fitur struktural, TF-IDF,
-   └── lencana + sorotan ◄──────────── popup.html / options.html                              ▼ RF / LightGBM → JSON
+   └── lencana + sorotan ◄──────────── popup.html                                         ▼ RF / LightGBM → JSON
 ```
 
 - Data halaman **hanya dikirim ke `127.0.0.1`** (ekstensi menolak alamat selain localhost).
@@ -55,7 +57,7 @@ Halaman .ac.id ── content.js + scanner.js ──► background.js (service w
 ## Struktur repo
 
 ```
-extension/   manifest.json, content.js, scanner.js, background.js, popup.*, options.*, icons/
+extension/   manifest.json, content.js, scanner.js, background.js, ringkas.js, popup.*, icons/
 backend/     app.py, engine.py, lexicon.json, requirements.txt, models/ (RF, LightGBM, TF-IDF, scaler)
 scripts/     install.ps1, build_assets.py
 tests/       test_parity.py (paritas fitur dengan training), test_api.py (uji endpoint)
@@ -63,16 +65,16 @@ docs/        PANDUAN_LAB.md, KONTRAK_API.md, LAPORAN_TRAINING_FINAL.md, hasil_ev
 jalankan.ps1 satu perintah untuk demo
 ```
 
-## Hasil model (data final, 1.038 halaman, split per domain/klaster 70:20:10)
+## Hasil model (data final, 1.034 halaman setelah empat berkas gambar dikeluarkan, split per domain/klaster 70:20:10)
 
 | Model | Split | Accuracy | Precision | Recall | F1 | ROC-AUC |
 |---|---|---|---|---|---|---|
-| Random Forest | test (221) | 0,982 | 1,000 | 0,966 | 0,983 | 0,9995 |
-| Random Forest | holdout (105) | 0,943 | 0,979 | 0,904 | 0,940 | 0,988 |
-| LightGBM | test (221) | 0,986 | 1,000 | 0,974 | 0,987 | 0,996 |
-| LightGBM | holdout (105) | 0,990 | 1,000 | 0,981 | 0,990 | 1,000 |
+| Random Forest | test (219) | 0,982 | 1,000 | 0,965 | 0,982 | 0,9957 |
+| Random Forest | holdout (105) | 1,000 | 1,000 | 1,000 | 1,000 | 1,0000 |
+| LightGBM | test (219) | 0,986 | 1,000 | 0,974 | 0,987 | 0,9965 |
+| LightGBM | holdout (105) | 0,990 | 1,000 | 0,981 | 0,990 | 1,0000 |
 
-Uji McNemar RF vs LightGBM tidak bermakna (test p=1,0; holdout p=0,0625). Sumber lengkap: [docs/LAPORAN_TRAINING_FINAL.md](docs/LAPORAN_TRAINING_FINAL.md).
+Uji McNemar RF vs LightGBM tidak bermakna (test p=1,000; holdout p=1,000). Sumber lengkap: [docs/LAPORAN_TRAINING_FINAL.md](docs/LAPORAN_TRAINING_FINAL.md).
 
 ## Keterbatasan (jujur)
 
@@ -85,5 +87,4 @@ Uji McNemar RF vs LightGBM tidak bermakna (test p=1,0; holdout p=0,0625). Sumber
 
 ## Lisensi & etika
 
-Dipakai untuk riset dan pembelajaran. Data halaman diproses lokal; riwayat disimpan hanya di browser pengguna dan dapat dihapus
-dari halaman Pengaturan.
+Dipakai untuk riset dan pembelajaran. Data halaman diproses lokal dan tidak disimpan; ekstensi hanya menyimpan hasil pemeriksaan sementara pada tab yang terbuka.

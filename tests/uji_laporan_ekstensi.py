@@ -166,7 +166,7 @@ def main():
             t_load = time.time()
             if manual:
                 tid = tab_id(url)
-                sw.evaluate("""async (t) => { await chrome.scripting.executeScript({target:{tabId:t}, files:['lexicon.js','scanner.js','content.js']});
+                sw.evaluate("""async (t) => { await chrome.scripting.executeScript({target:{tabId:t}, files:['lexicon.js','scanner.js','ringkas.js','content.js']});
                     await new Promise(r=>setTimeout(r,300)); return await chrome.tabs.sendMessage(t,{type:'RESCAN',manual:true}); }""", tid)
             tid, s = wait_done(url)
             return pg, tid, s, (time.time() - t_load) * 1000
@@ -204,7 +204,8 @@ def main():
                 txt, pm = popup_text(tid)
                 popup_ms.append(pm)
                 row["ms_popup_tampil"] = round(pm)
-                row["popup_persen"] = bool(re.search(r"\d+(\.\d+)?%", txt))
+                row["popup_kata_status"] = any(k in txt for k in ("AMAN", "HATI-HATI", "ADA JUDI"))
+                row["popup_tanpa_persen"] = "%" not in txt
             rows.append(row)
             if i in (1, args.n + 1):
                 pg.screenshot(path=str(IMG / ("halaman_nyata_judi.png" if label == 1 else "halaman_nyata_normal.png")))
@@ -243,6 +244,13 @@ def main():
                               "persen_di_bawah_2000ms_e2e": round(100 * sum(r["ms_e2e"] < 2000 for r in done) / len(done), 1) if done else None,
                               "persen_di_bawah_2000ms_load_ke_hasil": round(100 * sum(r["ms_load_ke_hasil"] < 2000 for r in done) / len(done), 1) if done else None}
 
+        # tangkapan layar popup status HATI-HATI (halaman yang diberi label waspada)
+        w_row = next((r for r in done if r["label_ekstensi"] == "waspada"), None)
+        if w_row:
+            pgw, tidw, _, _ = open_scan(w_row["url"])
+            popup_text(tidw, "uji_waspada_popup.png")
+            pgw.close()
+
         # ================= TC-03 : elemen tersembunyi =================
         pg, tid, s, _ = open_scan("https://uji-hidden.ac.id/")
         r = s["result"]
@@ -255,7 +263,9 @@ def main():
                               "label": r["label"], "p_judi": r["ml"]["p_judi"]}
         pg.screenshot(path=str(IMG / "uji_tersembunyi_halaman.png"))
         txt, _ = popup_text(tid, "uji_tersembunyi_popup.png")
-        res["tc"]["TC-03"]["popup_menampilkan_elemen_tersembunyi"] = "tersembunyi" in txt.lower()
+        m5 = re.search(r"tersembunyi\s*(\d+) bagian", txt)
+        res["tc"]["TC-03"]["popup_menampilkan_elemen_tersembunyi"] = bool(m5)
+        res["tc"]["TC-03"]["popup_jumlah_bagian"] = int(m5.group(1)) if m5 else None
         pg.close()
         # kontrol negatif: menu tersembunyi TANPA kata kunci tidak boleh dilaporkan
         pg, tid, s, _ = open_scan("https://uji-normal.ac.id/")
@@ -270,11 +280,13 @@ def main():
         pg, tid, s, _ = open_scan(url_j)
         txt, _ = popup_text(tid, "popup_judi_nyata.png")
         pg.screenshot(path=str(IMG / "halaman_judi_nyata_dengan_sorotan.png"))
-        m = re.search(r"(\d+(?:\.\d+)?)%", txt)
         # buka panel lencana (klik) lalu tangkap layar
-        res["tc"]["TC-05"] = {"persen_tampil_di_popup": bool(m), "nilai": m.group(0) if m else None,
-                              "label_tampil": any(k in txt for k in ("Terindikasi", "Aman", "Waspada")),
-                              "cuplikan_popup": txt[:160].replace("\n", " | ")}
+        res["tc"]["TC-05"] = {"kata_status_tampil": any(k in txt for k in ("AMAN", "HATI-HATI", "ADA JUDI")),
+                              "tiga_pemeriksaan_tampil": all(k in txt for k in ("Tulisan judi terlihat", "Tulisan judi tersembunyi", "Tautan ke situs judi")),
+                              "tanpa_persentase_dan_istilah_teknis": ("%" not in txt) and not re.search(r"display:|visibility:|opacity:|TF-IDF|DOM", txt),
+                              "popup_kata_status_10_halaman": sum(1 for r in rows if r.get("popup_kata_status")),
+                              "popup_diperiksa": sum(1 for r in rows if "popup_kata_status" in r),
+                              "cuplikan_popup": txt[:200].replace(chr(10), " | ")}
         pg.close()
 
         # ================= TC-04 : error koneksi =================
@@ -332,25 +344,18 @@ def main():
 
         # ================= TC-07 : kompatibilitas MV3 =================
         errs = []
-        for nm, url in (("popup", f"chrome-extension://{ext_id}/popup.html"), ("options", f"chrome-extension://{ext_id}/options.html")):
+        for nm, url in (("popup", f"chrome-extension://{ext_id}/popup.html"),):
             pg = ctx.new_page()
             pg.on("pageerror", lambda e, nm=nm: errs.append((nm, str(e))))
             pg.on("console", lambda m, nm=nm: errs.append((nm, m.text)) if m.type == "error" else None)
             pg.goto(url); pg.wait_for_timeout(700)
-            if nm == "options":
-                pg.click("#testBtn"); pg.wait_for_timeout(1500)
-                res["tc"].setdefault("TC-07", {})["tes_koneksi_di_pengaturan"] = pg.inner_text("#srv")[:120].replace("\n", " | ")
-                pg.screenshot(path=str(IMG / "pengaturan.png"), full_page=True)
             pg.close()
         sw_err = [c for c in log_console if c[1] == "error"]
         res["tc"].setdefault("TC-07", {}).update({
             "browser": res["browser"]["versi"], "manifest_version": manifest["manifest_version"], "service_worker_aktif": True,
-            "galat_popup_options": errs, "galat_service_worker": sw_err,
+            "galat_popup": errs, "galat_service_worker": sw_err,
             "jumlah_galat_total": len(errs) + len(sw_err)})
 
-        # riwayat
-        hist = sw.evaluate("async () => (await chrome.storage.local.get('history')).history || []")
-        res["riwayat_tersimpan"] = len(hist)
         ctx.close()
 
     (OUT / f"hasil_ekstensi_{args.channel}.json").write_text(json.dumps(res, indent=2, ensure_ascii=False), encoding="utf-8")
