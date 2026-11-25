@@ -2,48 +2,24 @@
   "chromium": {
     "n": 50,
     "label_ml_sama_dengan_offline": 50,
-    "selisih_p_rata2": 0.0008,
+    "selisih_p_rata2": 0.0,
     "selisih_p_median": 0.0,
-    "selisih_p_maks": 0.0091,
+    "selisih_p_maks": 0.0,
     "beda_label": [],
     "waspada": [
       {
-        "key": "dataset_baru/ununtb.ac.id/index_e6b3e06a74.html",
+        "key": "dataset_baru/journal.smaratungga.ac.id/indexphp-index_15eacef782.html",
         "label_benar": 1,
-        "p_judi": 0.302,
-        "p_offline": 0.302,
-        "kw_kuat": 1,
-        "hidden": 1
-      },
-      {
-        "key": "dataset_baru/ununtb.ac.id/visi-dan-misi_d0a0ac52bc.html",
-        "label_benar": 1,
-        "p_judi": 0.291,
-        "p_offline": 0.291,
-        "kw_kuat": 1,
-        "hidden": 1
-      },
-      {
-        "key": "dataset_baru/jurnal.staim-probolinggo.ac.id/iconihum_8266d8b649.html",
-        "label_benar": 1,
-        "p_judi": 0.405,
-        "p_offline": 0.405,
+        "p_judi": 0.33,
+        "p_offline": 0.33,
         "kw_kuat": 0,
-        "hidden": 4
-      },
-      {
-        "key": "dataset_baru/ununtb.ac.id/elearningununtb_77d2f13b2e.html",
-        "label_benar": 1,
-        "p_judi": 0.316,
-        "p_offline": 0.316,
-        "kw_kuat": 1,
-        "hidden": 1
+        "hidden": 0
       },
       {
         "key": "negatif_kategori_c/fis.uii.ac.id/blog-2024-08-21-islam-melarang-judi-dan-pinjaman-online_4e2961172d.html",
         "label_benar": 0,
-        "p_judi": 0.275,
-        "p_offline": 0.278,
+        "p_judi": 0.1,
+        "p_offline": 0.1,
         "kw_kuat": 11,
         "hidden": 0
       }
@@ -52,48 +28,24 @@
   "msedge": {
     "n": 50,
     "label_ml_sama_dengan_offline": 50,
-    "selisih_p_rata2": 0.0009,
+    "selisih_p_rata2": 0.0,
     "selisih_p_median": 0.0,
-    "selisih_p_maks": 0.0091,
+    "selisih_p_maks": 0.0,
     "beda_label": [],
     "waspada": [
       {
-        "key": "dataset_baru/ununtb.ac.id/index_e6b3e06a74.html",
+        "key": "dataset_baru/journal.smaratungga.ac.id/indexphp-index_15eacef782.html",
         "label_benar": 1,
-        "p_judi": 0.302,
-        "p_offline": 0.302,
-        "kw_kuat": 1,
-        "hidden": 1
-      },
-      {
-        "key": "dataset_baru/ununtb.ac.id/visi-dan-misi_d0a0ac52bc.html",
-        "label_benar": 1,
-        "p_judi": 0.291,
-        "p_offline": 0.291,
-        "kw_kuat": 1,
-        "hidden": 1
-      },
-      {
-        "key": "dataset_baru/jurnal.staim-probolinggo.ac.id/iconihum_8266d8b649.html",
-        "label_benar": 1,
-        "p_judi": 0.405,
-        "p_offline": 0.405,
+        "p_judi": 0.33,
+        "p_offline": 0.33,
         "kw_kuat": 0,
-        "hidden": 4
-      },
-      {
-        "key": "dataset_baru/ununtb.ac.id/elearningununtb_77d2f13b2e.html",
-        "label_benar": 1,
-        "p_judi": 0.316,
-        "p_offline": 0.316,
-        "kw_kuat": 1,
-        "hidden": 1
+        "hidden": 0
       },
       {
         "key": "negatif_kategori_c/fis.uii.ac.id/blog-2024-08-21-islam-melarang-judi-dan-pinjaman-online_4e2961172d.html",
         "label_benar": 0,
-        "p_judi": 0.275,
-        "p_offline": 0.278,
+        "p_judi": 0.1,
+        "p_offline": 0.1,
         "kw_kuat": 11,
         "hidden": 0
       }

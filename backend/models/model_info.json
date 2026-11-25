@@ -20,7 +20,7 @@
   },
   "scaler": "MinMaxScaler fit di train",
   "smote_diterapkan": false,
-  "rasio_minoritas_train": 0.4887640449438202,
+  "rasio_minoritas_train": 0.48732394366197185,
   "ambang_smote": 0.4,
   "random_state": 42,
   "versi": {

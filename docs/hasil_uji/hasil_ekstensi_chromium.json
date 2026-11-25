@@ -1,15 +1,15 @@
 {
   "channel": "chromium",
-  "dibuat": "2026-11-06 07:39:51",
+  "dibuat": "2026-11-19 18:02:37",
   "tc": {
     "TC-01": {
       "halaman": 25,
-      "terdeteksi_judi": 21,
-      "waspada": 4,
+      "terdeteksi_judi": 24,
+      "waspada": 1,
       "lolos_aman": 0,
-      "badge_tanda_seru": 21,
+      "badge_tanda_seru": 24,
       "banner_tampil": 25,
-      "rata2_sorotan": 14.1
+      "rata2_sorotan": 9.4
     },
     "TC-02": {
       "halaman": 25,
@@ -22,43 +22,43 @@
     "TC-06": {
       "e2e_ms": {
         "n": 50,
-        "rata_rata": 235.1,
-        "median": 102.0,
-        "p95": 802,
-        "min": 77,
-        "maks": 1458
+        "rata_rata": 124.9,
+        "median": 92.0,
+        "p95": 287,
+        "min": 76,
+        "maks": 590
       },
       "server_ms": {
         "n": 50,
-        "rata_rata": 126.9,
-        "median": 34.5,
-        "p95": 739.4,
-        "min": 28.2,
-        "maks": 1180.1
+        "rata_rata": 23.6,
+        "median": 19.1,
+        "p95": 42.1,
+        "min": 15.4,
+        "maks": 66.7
       },
       "ekstraksi_ms": {
         "n": 50,
-        "rata_rata": 16.0,
-        "median": 6.5,
-        "p95": 61,
+        "rata_rata": 13.2,
+        "median": 6.0,
+        "p95": 41,
         "min": 3,
-        "maks": 176
+        "maks": 106
       },
       "load_ke_hasil_ms": {
         "n": 50,
-        "rata_rata": 749.8,
-        "median": 628.5,
-        "p95": 1242,
-        "min": 622,
-        "maks": 1932
+        "rata_rata": 658.2,
+        "median": 630.0,
+        "p95": 794,
+        "min": 623,
+        "maks": 1104
       },
       "popup_tampil_ms": {
         "n": 10,
-        "rata_rata": 80.0,
-        "median": 77.7,
-        "p95": 96.4,
-        "min": 64.7,
-        "maks": 111.8
+        "rata_rata": 86.9,
+        "median": 82.8,
+        "p95": 90.9,
+        "min": 71.1,
+        "maks": 127.7
       },
       "persen_di_bawah_2000ms_e2e": 100.0,
       "persen_di_bawah_2000ms_load_ke_hasil": 100.0
@@ -76,7 +76,7 @@
       "jumlah_elemen_dilaporkan": 5,
       "fitur_has_hidden": 1,
       "label": "judi",
-      "p_judi": 0.86,
+      "p_judi": 1,
       "popup_menampilkan_elemen_tersembunyi": true,
       "kontrol_negatif": {
         "elemen_tersembunyi_dilaporkan": 0,
@@ -86,9 +86,9 @@
     },
     "TC-05": {
       "persen_tampil_di_popup": true,
-      "nilai": "90.1%",
+      "nilai": "100.0%",
       "label_tampil": true,
-      "cuplikan_popup": "pko.ubharajaya.ac.id | ⚠ Terindikasi konten judi | Model menilai halaman ini memuat konten judi online. | Peluang konten judi | 90.1% | MENGAPA HASILNYA BEGINI | Model rand"
+      "cuplikan_popup": "ictmandalawaluya.ac.id | ⚠ Terindikasi konten judi | Model menilai halaman ini memuat konten judi online. | Peluang konten judi | 100.0% | MENGAPA HASILNYA BEGINI | Model r"
     },
     "TC-04": {
       "status_state": "error",
@@ -109,19 +109,19 @@
       "html_rusak": {
         "berhasil": true,
         "label": "judi",
-        "p_judi": 0.5645,
+        "p_judi": 1,
         "error": null,
-        "ms_e2e": 155,
-        "ms_ekstrak": 2,
+        "ms_e2e": 69,
+        "ms_ekstrak": 3,
         "dom_depth": 13,
         "tautan": 1
       },
       "halaman_kosong": {
         "berhasil": true,
         "label": "aman",
-        "p_judi": 0.0779,
+        "p_judi": 0,
         "error": null,
-        "ms_e2e": 90,
+        "ms_e2e": 67,
         "ms_ekstrak": 1,
         "dom_depth": 3,
         "tautan": 0
@@ -129,9 +129,9 @@
       "bukan_html_json": {
         "berhasil": true,
         "label": "aman",
-        "p_judi": 0.0804,
+        "p_judi": 0,
         "error": null,
-        "ms_e2e": 87,
+        "ms_e2e": 75,
         "ms_ekstrak": 2,
         "dom_depth": 3,
         "tautan": 0
@@ -139,19 +139,19 @@
       "halaman_besar_14000_paragraf": {
         "berhasil": true,
         "label": "aman",
-        "p_judi": 0.049,
+        "p_judi": 0,
         "error": null,
-        "ms_e2e": 291,
-        "ms_ekstrak": 140,
+        "ms_e2e": 285,
+        "ms_ekstrak": 150,
         "dom_depth": 4,
         "tautan": 14000
       },
       "dom_sangat_dalam_1500": {
         "berhasil": true,
         "label": "judi",
-        "p_judi": 0.7337,
+        "p_judi": 1,
         "error": null,
-        "ms_e2e": 80,
+        "ms_e2e": 227,
         "ms_ekstrak": 5,
         "dom_depth": 513,
         "tautan": 0
@@ -159,7 +159,7 @@
       "service_worker_masih_hidup": true
     },
     "TC-07": {
-      "tes_koneksi_di_pengaturan": "✔ Terhubung (8 ms) | Model dimuat : lightgbm, random_forest | Dilatih pada : Python 3.14.0, scikit-learn 1.9.1 | Leksikon     ",
+      "tes_koneksi_di_pengaturan": "✔ Terhubung (10 ms) | Model dimuat : lightgbm, random_forest | Dilatih pada : Python 3.14.0, scikit-learn 1.9.1 | Leksikon    ",
       "browser": "Chrome/156.0.0.0",
       "manifest_version": 3,
       "service_worker_aktif": true,
@@ -183,13 +183,13 @@
   },
   "konfusi_ekstensi": {
     "judi_saja_sebagai_positif": {
-      "tp": 21,
-      "fn": 4,
+      "tp": 24,
+      "fn": 1,
       "fp": 0,
       "tn": 25,
-      "recall": 0.84,
+      "recall": 0.96,
       "precision": 1.0,
-      "akurasi": 0.92
+      "akurasi": 0.98
     },
     "judi_atau_waspada_sebagai_positif": {
       "tp": 25,
